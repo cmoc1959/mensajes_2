@@ -140,6 +140,18 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
             `, claus, 100, 0)
     }
 })
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    if (info.life() == 0) {
+        game.over(false, effects.starField)
+    } else {
+        info.changeScoreBy(-2)
+        claus.destroy()
+        zombi.destroy()
+        jugador1(8, 8, info.life(), poder)
+        bicho1(184, 232, 1)
+    }
+})
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     if (arma == 1) {
         projectile = sprites.createProjectileFromSprite(img`
@@ -188,6 +200,11 @@ function jugador1 (x: number, y: number, vidas: number, energia: number) {
     poder = energia
     info.setLife(vidas)
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    zombi.destroy(effects.spray, 100)
+    info.changeScoreBy(5)
+    bicho1(184, 232, 1)
+})
 let poder = 0
 let energia1: Sprite = null
 let poder_bicho1 = 0
